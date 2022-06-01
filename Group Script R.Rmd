@@ -1,0 +1,264 @@
+install.packages("rmarkdown")
+
+---
+#title: "Wine Quality Prediction Project"
+#authors: "Autumn Heyman, Erin Weaver, Georgia Miller"
+---
+# File Setup Tasks
+## Import Libraries
+
+```{r}
+library("tidyverse")
+library("caret")
+library("lmtest")
+library("magrittr")
+library("dplyr")
+library("tidyr")
+library("popbio")
+library("e1071")
+library("PerformanceAnalytics")
+library("corrplot")
+library("corpcor")
+library("MASS")
+```
+
+## Set Working Directory
+** can be manually changed to source file location via session menu **
+
+```{r}
+setwd("/Users/erinweaver/Documents/GitHub/TheThreeMusketeers")
+```
+
+## Import Dataset
+
+```{r}
+wineqt <- read.csv("Data/WineQT.csv")
+head(wineqt)
+```
+
+# Data Wrangling 
+
+## Drop Id Column
+
+```{r}
+wine_subset <- wine[, c(1,2,3,4,5,6,7,8,9,10,11,12)]
+```
+
+## Recode Quality into 3 Groups  *** MODIFY OLD CODE TO FIT NEW ANALYSIS ***
+
+```{r}
+wine$qualityR <- NA
+wine$qualityR[wine$quality==3] <- 0
+wine$qualityR[wine$quality==4] <- 0
+wine$qualityR[wine$quality==5] <- 0
+wine$qualityR[wine$quality==6] <- 1
+wine$qualityR[wine$quality==7] <- 1
+wine$qualityR[wine$quality==8] <- 1
+head(wine)
+```
+
+## Check All Data Types 
+
+```{r}
+
+```
+
+## Convert Variables to Proper Data Type (If Necessary)
+
+```{r}
+
+```
+
+# Assumption Testing:
+
+## Create a Base Logistic Model  *** MODIFY OLD CODE TO FIT NEW ANALYSIS ***
+
+```{r}
+mylogit <- glm(qualityR ~ fixed.acidity + volatile.acidity + citric.acid + 
+                  residual.sugar + chlorides + free.sulfur.dioxide + total.sulfur.dioxide+
+                  density + pH + sulphates + alcohol, data = wine, family="binomial")
+```
+
+## Predicting Wine Quality *** MODIFY OLD CODE TO FIT NEW ANALYSIS ***
+
+```{r}
+probabilities <- predict(mylogit, type = "response")
+```
+
+```{r}
+avg <- mean(probabilities)
+wine$Predicted <- ifelse(probabilities > avg, "good", "poor")
+head(wine)
+```
+
+## Recoding the Predicted Variable *** MODIFY OLD CODE TO FIT NEW ANALYSIS ***
+
+### Create Empty Column for Recode
+
+```{r}
+wine$PredictedR <- NA
+```
+
+### Recode Predicted Variable 
+
+```{r}
+wine$PredictedR[wine$Predicted=="good"] <- 1
+wine$PredictedR[wine$Predicted=="poor"] <- 0
+head(wine)
+```
+
+## Converting Variables to Factors *** MODIFY TO FIT NEW ANALYSIS ***
+
+```{r}
+wine$PredictedR <- as.factor(wine$PredictedR)
+wine$qualityR <- as.factor(wine$qualityR)
+head(wine)
+```
+
+## Creating a Confusion Matrix *** MODIFY TO FIT NEW ANALYSIS ***
+
+```{r}
+cmatrix <- caret::confusionMatrix(wine$PredictedR, wine$qualityR)
+cmatrix
+```
+
+## Assumption 1: Independence of Errors
+
+### A Visual Test
+```{r}
+plot(mylogit$residuals)
+```
+
+### The Durbin Watson Test
+```{r}
+dwtest(mylogit, alternative="two.sided")
+```
+
+## Assumption 2: Correlation 
+
+### Pearson's Test
+
+```{r}
+chart.Correlation(wine_subset, histogram=FALSE, method="pearson")
+```
+
+### Correlation Matrix
+```{r}
+corr_matrix <- cor(wine_subset)
+corr_matrix
+```
+
+### What is This Called :)
+```{r}
+corrplot(corr_matrix, type="upper", order="hclust", p.mat = corr_matrix, sig.level = 0.01, insig="blank")
+```
+
+## Assumption #3: Absence of multicollinearity
+
+```{r}
+cor2pcor(cov(wine_subset))
+cor2pcor(cov(wine_subset))
+```
+
+```{r}
+winecor <- ginv(cor(wine_subset))
+colnames(winecor) <- colnames(wine_subset)
+rownames(winecor) <- colnames(wine_subset)
+winecor
+```
+
+```{r}
+corrplot(corr = winecor, method = "number", is.corr = FALSE)
+```
+
+## Assumption #4: Logit Linearity *** MODIFY TO FIT NEW ANALYSIS ***
+
+```{r}
+wine1 <- wine %>% dplyr::select_if(is.numeric)
+predictors <- colnames(wine1)
+wine1 <- wine1 %>% mutate(logit=log(probabilities/(1-probabilities))) %>%
+gather(key= "predictors", value="predictor.value", -logit)
+```
+
+```{r}
+ggplot(wine1, aes(logit, predictor.value))+
+geom_point(size=.5, alpha=.5)+
+geom_smooth(method= "loess")+
+theme_bw()+
+facet_wrap(~predictors, scales="free_y")
+```
+
+## Assumption #5: Absence of Influential Outliers *** MODIFY TO FIT NEW ANALYSIS ***
+
+```{r}
+infl <- influence.measures(mylogit)
+summary(infl)
+```
+### Results indicate no evidence of **influential** outliers
+
+Box Plot Method
+
+### all box plots
+```{r}
+boxplot(wine1)
+ggplot(stack(wine1), aes(x = ind, y = values))+
+  geom_boxplot(fill='rosybrown', color="darkred") +
+  coord_flip()
+```
+
+All variables have outliers.
+
+
+
+*********************** MOVING FORWARD **************************
+
+# Correcting for Violation of Assumptions
+
+## Corrections for Violation of Multicollinearity
+
+```{r}
+```
+
+## Corrections for Violation of Logit Linearity
+```{r}
+```
+
+
+********************* PLACE HOLDER FOR OLD CODE BELOW HERE ***********************
+
+### Convert the Recode Column to a Numeric Format xxxxx
+
+To ensure that the data was continuous, I will covert the new quality column to s numeric column.
+```{r}
+wine$qualityR2 <- as.numeric(wine$qualityR)
+head(wine)
+```
+
+### Subsetting Data
+I will create a data frame with the numeric quality column and the independent variables.
+```{r}
+wine_subset <- wine[, c(1,2,3,4,5,6,7,8,9,10,11,16)]
+```
+
+## Testing for Multicollinearity
+
+The VIFs for fixed acidity and density are greater than 5 and may be causing multicollinearity to be present in the data.
+
+## Test for Independence of Errors
+
+We are looking for pretty even distribution of points all the way across the x axis. 
+We have that, so have met the assumption of independent errors.
+
+### Perform Durbin-Watson Test to confirm results of intial test
+
+Output:
+Durbin-Watson test
+
+data:  mylogit
+DW = 1.8156, p-value = 0.001465
+alternative hypothesis: true autocorrelation is not 0
+
+Since DW value is within 1-3 range, we have met the assumption of independent errors. 
+
+
+
