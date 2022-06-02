@@ -96,7 +96,7 @@ summary(wine_wrangled)
 ```
 
 
-## Dividing data into training and test set  *** REVIEW THIS SECTION**
+## Dividing data into training and test set  *** REVIEW THIS SECTION ***
 *** how to determine appropriate sample size
 *** what is seed and how to determine appropriate value
 
@@ -138,34 +138,34 @@ summary(model)
 
 ```{r}
 
-#wine_wrangled <- wine_subset %>% filter(quality >=5)
-#head(wine_wrangled)
+wine_wrangled <- wine_subset %>% filter(quality >=5)
+head(wine_wrangled)
 
 ```
 
 ## Recode to combine observations with Quality 7 & 8 
 ```{r}
 
-#wine_wrangled$qualityR <- NA
-#wine_wrangled$qualityR [wine_wrangled$quality==5] <- 0
-#wine_wrangled$qualityR [wine_wrangled$quality==6] <- 1
-#wine_wrangled$qualityR [wine_wrangled$quality==7] <- 2
-#wine_wrangled$qualityR [wine_wrangled$quality==8] <- 2
-#head(wine_wrangled)
+wine_wrangled$qualityR <- NA
+wine_wrangled$qualityR [wine_wrangled$quality==5] <- 0
+wine_wrangled$qualityR [wine_wrangled$quality==6] <- 1
+wine_wrangled$qualityR [wine_wrangled$quality==7] <- 2
+wine_wrangled$qualityR [wine_wrangled$quality==8] <- 2
+head(wine_wrangled)
 
 ```
 ## Drop Quality
 
 ```{r}
-#wine_wrangled <- wine_subset[, c(1,2,3,4,5,6,7,8,9,10,11,13)]
-#head(wine_wrangled)
+wine_wrangledR <- wine_wrangled[, c(1,2,3,4,5,6,7,8,9,10,11,13)]
+head(wine_wrangledR)
 ```
 
 
 ## Check All Data Types 
 
 ```{r}
-#str(wine_wrangled)
+str(wine_wrangledR)
 ```
 
 
@@ -174,7 +174,7 @@ summary(model)
 ## Define the Order of the Dependent Variable
 ```{r}
 
-#wine_wrangled$qualityR = factor(wine_wrangled$qualityR, levels = c("0", "1", "2"), ordered = TRUE) 
+wine_wrangledR$qualityR = factor(wine_wrangledR$qualityR, levels = c("0", "1", "2"), ordered = TRUE) 
 
 ```
 
@@ -182,7 +182,7 @@ summary(model)
 
 ### Summarizing the dataset
 ```{r}
-#summary(wine_wrangled)
+summary(wine_wrangledR)
 ```
 
 
@@ -193,31 +193,31 @@ summary(model)
 ### Random sampling 
 ```{r}
 
-#samplesize = 0.60*nrow(wine_wrangled)
-#set.seed(100)
-#index = sample(seq_len(nrow(wine_wrangled)), size = samplesize)
+samplesize = 0.60*nrow(wine_wrangledR)
+set.seed(100)
+index = sample(seq_len(nrow(wine_wrangledR)), size = samplesize)
 
 ```
 
 ### Creating training and test set 
 ```{r}
-#datatrain = wine_wrangled[index,]
-#datatest = wine_wrangled[-index,]
+datatrain = wine_wrangledR[index,]
+datatest = wine_wrangledR[-index,]
 ```
 
 ## Create the Ordinal Logistic Regression Model
 ```{r}
 
-#model= polr(qualityR ~ fixed.acidity + volatile.acidity + citric.acid + residual.sugar + chlorides + free.sulfur.dioxide + total.sulfur.dioxide + density + pH + sulphates + alcohol, data = wine_wrangled, Hess = TRUE)
+model= polr(qualityR ~ fixed.acidity + volatile.acidity + citric.acid + residual.sugar + chlorides + free.sulfur.dioxide + total.sulfur.dioxide + density + pH + sulphates + alcohol, data = wine_wrangledR, Hess = TRUE)
 
-#summary(model)
+summary(model)
 
 ```
 
 
 
 ********* STOP SIGN ******** :)
-** Clean Environment, rerun setup tasks, and run the next section
+
 
 
 
