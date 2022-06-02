@@ -1,5 +1,3 @@
-install.packages("rmarkdown")
-
 ---
 #title: "Wine Quality Prediction Project"
 #authors: "Autumn Heyman, Erin Weaver, Georgia Miller"
@@ -23,7 +21,7 @@ library("MASS")
 ```
 
 ## Set Working Directory
-** can be manually changed to source file location via session menu **
+*** can be manually overridden by selecting source file location from the session menu **
 
 ```{r}
 setwd("/Users/georg/Documents/GitHub/TheThreeMusketeers")
@@ -38,84 +36,190 @@ head(wineqt)
 
 # Data Wrangling 
 
-## Drop Id Column
+## Drop Id Column 
 
 ```{r}
 wine_subset <- wineqt[, c(1,2,3,4,5,6,7,8,9,10,11,12)]
 ```
 
-## Recode Quality into 3 Groups  *** MODIFY OLD CODE TO FIT NEW ANALYSIS ***
+
+
+********* STOP SIGN ******** :)
+
+
+# RUN THIS SECTION TO create ordinal model with 3 groups defined as 3-4, 5-6, 7-8
+
+
+## Recode into three groups
 
 ```{r}
-wineqt$qualityR <- NA
-wineqt$qualityR[wine$quality==3] <- 0
-wineqt$qualityR[wine$quality==4] <- 0
-wineqt$qualityR[wine$quality==5] <- 1
-wineqt$qualityR[wine$quality==6] <- 1
-wineqt$qualityR[wine$quality==7] <- 2
-wineqt$qualityR[wine$quality==8] <- 2
-head(wineqt)
+
+wine_subset$qualityR <- NA
+wine_subset$qualityR [wine_subset$quality==3] <- 0
+wine_subset$qualityR [wine_subset$quality==4] <- 0
+wine_subset$qualityR [wine_subset$quality==5] <- 1
+wine_subset$qualityR [wine_subset$quality==6] <- 1
+wine_subset$qualityR [wine_subset$quality==7] <- 2
+wine_subset$qualityR [wine_subset$quality==8] <- 2
+head(wine_subset)
+
 ```
+## Drop Quality
+
+```{r}
+wine_wrangled <- wine_subset[, c(1,2,3,4,5,6,7,8,9,10,11,13)]
+head(wine_wrangled)
+```
+
 
 ## Check All Data Types 
 
 ```{r}
-str(wineqt)
+str(wine_wrangled)
 ```
 
-## Convert Variables to Proper Data Type (If Necessary)
+
+# Creating a Base Model  
+
+## Define the Order of the Dependent Variable
+```{r}
+
+wine_wrangled$qualityR = factor(wine_wrangled$qualityR, levels = c("0", "1", "2"), ordered = TRUE) 
+
+```
+
+## Exploratory Analysis
+
+### Summarizing the dataset
+```{r}
+summary(wine_wrangled)
+```
+
+
+## Dividing data into training and test set  *** REVIEW THIS SECTION**
+*** how to determine appropriate sample size
+*** what is seed and how to determine appropriate value
+
+### Random sampling 
+```{r}
+
+samplesize = 0.60*nrow(wine_wrangled)
+set.seed(100)
+index = sample(seq_len(nrow(wine_wrangled)), size = samplesize)
+
+```
+
+### Creating training and test set 
+```{r}
+datatrain = wine_wrangled[index,]
+datatest = wine_wrangled[-index,]
+```
+
+## Create the Ordinal Logistic Regression Model
+```{r}
+
+model= polr(qualityR ~ fixed.acidity + volatile.acidity + citric.acid + residual.sugar + chlorides + free.sulfur.dioxide + total.sulfur.dioxide + density + pH + sulphates + alcohol, data = wine_wrangled, Hess = TRUE)
+
+summary(model)
+
+```
+
+
+
+
+********* STOP SIGN ******** :)
+** Clean Environment, rerun setup tasks, and run the next section
+
+
+# RUN THIS SECTION TO create an ordinal model with 3 groups defind as 5, 6, 7-8
+
+## Subset the data to only observations with a Quality of 5 or More.
+*** alternate path: recode entire data set into two groups
 
 ```{r}
-wine$qualityR <- as.numeric(wine$qualityR)
-head(wine)
+
+#wine_wrangled <- wine_subset %>% filter(quality >=5)
+#head(wine_wrangled)
+
 ```
 
-# Assumption Testing:
+## Recode to combine observations with Quality 7 & 8 
+```{r}
 
-## Create a Base Logistic Model  *** MODIFY OLD CODE TO FIT NEW ANALYSIS ***
+#wine_wrangled$qualityR <- NA
+#wine_wrangled$qualityR [wine_wrangled$quality==5] <- 0
+#wine_wrangled$qualityR [wine_wrangled$quality==6] <- 1
+#wine_wrangled$qualityR [wine_wrangled$quality==7] <- 2
+#wine_wrangled$qualityR [wine_wrangled$quality==8] <- 2
+#head(wine_wrangled)
+
+```
+## Drop Quality
 
 ```{r}
-mylogit <- glm(qualityR ~ fixed.acidity + volatile.acidity + citric.acid + 
-                  residual.sugar + chlorides + free.sulfur.dioxide + total.sulfur.dioxide+
-                  density + pH + sulphates + alcohol, data = wineqt, family="binomial")
+#wine_wrangled <- wine_subset[, c(1,2,3,4,5,6,7,8,9,10,11,13)]
+#head(wine_wrangled)
 ```
 
-## Predicting Wine Quality *** MODIFY OLD CODE TO FIT NEW ANALYSIS ***
+
+## Check All Data Types 
 
 ```{r}
-probabilities <- predict(mylogit, type = "response")
+#str(wine_wrangled)
 ```
 
+
+# Creating a Base Model  
+
+## Define the Order of the Dependent Variable
 ```{r}
-avg <- mean(probabilities)
-wineqt$Predicted <- ifelse(probabilities > avg,"below average", "good", "above average")
-head(wineqt)
+
+#wine_wrangled$qualityR = factor(wine_wrangled$qualityR, levels = c("0", "1", "2"), ordered = TRUE) 
+
 ```
 
-## Recoding the Predicted Variable *** MODIFY OLD CODE TO FIT NEW ANALYSIS ***
+## Exploratory Analysis
 
-### Create Empty Column for Recode
-
+### Summarizing the dataset
 ```{r}
-wineqt$PredictedR <- NA
+#summary(wine_wrangled)
 ```
 
-### Recode Predicted Variable 
 
+## Dividing data into training and test set  *** REVIEW THIS SECTION**
+*** how to determine appropriate sample size
+*** what is seed and hot to determine appropriate seed value
+
+### Random sampling 
 ```{r}
-wineqt$PredictedR[wineqt$Predicted=="above average"] <- 2
-wineqt$PredictedR[wineqt$Predicted=="good"] <- 1
-wineqt$PredictedR[wineqt$Predicted=="below average"] <- 0
-head(wineqt)
+
+#samplesize = 0.60*nrow(wine_wrangled)
+#set.seed(100)
+#index = sample(seq_len(nrow(wine_wrangled)), size = samplesize)
+
 ```
 
-## Converting Variables to Factors *** MODIFY TO FIT NEW ANALYSIS ***
-
+### Creating training and test set 
 ```{r}
-wineqt$PredictedR <- as.factor(wineqt$PredictedR)
-wineqt$qualityR <- as.factor(wineqt$qualityR)
-head(wineqt)
+#datatrain = wine_wrangled[index,]
+#datatest = wine_wrangled[-index,]
 ```
+
+## Create the Ordinal Logistic Regression Model
+```{r}
+
+#model= polr(qualityR ~ fixed.acidity + volatile.acidity + citric.acid + residual.sugar + chlorides + free.sulfur.dioxide + total.sulfur.dioxide + density + pH + sulphates + alcohol, data = wine_wrangled, Hess = TRUE)
+
+#summary(model)
+
+```
+
+
+
+********* STOP SIGN ******** :)
+** Clean Environment, rerun setup tasks, and run the next section
+
+
 
 ## Creating a Confusion Matrix *** MODIFY TO FIT NEW ANALYSIS ***
 
@@ -124,19 +228,14 @@ cmatrix <- caret::confusionMatrix(wineqt$PredictedR, wineqt$qualityR2)
 cmatrix
 ```
 
-## Assumption 1: Independence of Errors
 
-### A Visual Test
-```{r}
-plot(mylogit$residuals)
-```
+# Assumption Testing:
 
-### The Durbin Watson Test
-```{r}
-dwtest(mylogit, alternative="two.sided")
-```
+## Assumption 1: The Dependent Variable is Ordered
 
-## Assumption 2: Correlation 
+## Assumption 2: One or more of the independent variables are either continuous, categorical, or ordinal
+
+## Assumption 3: Absence of Multicollinearity
 
 ### Pearson's Test
 
