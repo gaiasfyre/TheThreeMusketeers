@@ -26,7 +26,7 @@ library("MASS")
 ** can be manually changed to source file location via session menu **
 
 ```{r}
-setwd("/Users/erinweaver/Documents/GitHub/TheThreeMusketeers")
+setwd("/Users/georg/Documents/GitHub/TheThreeMusketeers")
 ```
 
 ## Import Dataset
@@ -41,32 +41,32 @@ head(wineqt)
 ## Drop Id Column
 
 ```{r}
-wine_subset <- wine[, c(1,2,3,4,5,6,7,8,9,10,11,12)]
+wine_subset <- wineqt[, c(1,2,3,4,5,6,7,8,9,10,11,12)]
 ```
 
 ## Recode Quality into 3 Groups  *** MODIFY OLD CODE TO FIT NEW ANALYSIS ***
 
 ```{r}
-wine$qualityR <- NA
-wine$qualityR[wine$quality==3] <- 0
-wine$qualityR[wine$quality==4] <- 0
-wine$qualityR[wine$quality==5] <- 0
-wine$qualityR[wine$quality==6] <- 1
-wine$qualityR[wine$quality==7] <- 1
-wine$qualityR[wine$quality==8] <- 1
-head(wine)
+wineqt$qualityR <- NA
+wineqt$qualityR[wine$quality==3] <- 0
+wineqt$qualityR[wine$quality==4] <- 0
+wineqt$qualityR[wine$quality==5] <- 1
+wineqt$qualityR[wine$quality==6] <- 1
+wineqt$qualityR[wine$quality==7] <- 2
+wineqt$qualityR[wine$quality==8] <- 2
+head(wineqt)
 ```
 
 ## Check All Data Types 
 
 ```{r}
-
+str(wineqt)
 ```
 
 ## Convert Variables to Proper Data Type (If Necessary)
 
 ```{r}
-
+wineqt$qualityR <- as.factor(wineqt$qualityR)
 ```
 
 # Assumption Testing:
@@ -76,7 +76,7 @@ head(wine)
 ```{r}
 mylogit <- glm(qualityR ~ fixed.acidity + volatile.acidity + citric.acid + 
                   residual.sugar + chlorides + free.sulfur.dioxide + total.sulfur.dioxide+
-                  density + pH + sulphates + alcohol, data = wine, family="binomial")
+                  density + pH + sulphates + alcohol, data = wineqt, family="binomial")
 ```
 
 ## Predicting Wine Quality *** MODIFY OLD CODE TO FIT NEW ANALYSIS ***
@@ -87,8 +87,8 @@ probabilities <- predict(mylogit, type = "response")
 
 ```{r}
 avg <- mean(probabilities)
-wine$Predicted <- ifelse(probabilities > avg, "good", "poor")
-head(wine)
+wineqt$Predicted <- ifelse(probabilities > avg,"below average", "good", "above average")
+head(wineqt)
 ```
 
 ## Recoding the Predicted Variable *** MODIFY OLD CODE TO FIT NEW ANALYSIS ***
@@ -96,29 +96,30 @@ head(wine)
 ### Create Empty Column for Recode
 
 ```{r}
-wine$PredictedR <- NA
+wineqt$PredictedR <- NA
 ```
 
 ### Recode Predicted Variable 
 
 ```{r}
-wine$PredictedR[wine$Predicted=="good"] <- 1
-wine$PredictedR[wine$Predicted=="poor"] <- 0
-head(wine)
+wineqt$PredictedR[wineqt$Predicted=="above average"] <- 2
+wineqt$PredictedR[wineqt$Predicted=="good"] <- 1
+wineqt$PredictedR[wineqt$Predicted=="below average"] <- 0
+head(wineqt)
 ```
 
 ## Converting Variables to Factors *** MODIFY TO FIT NEW ANALYSIS ***
 
 ```{r}
-wine$PredictedR <- as.factor(wine$PredictedR)
-wine$qualityR <- as.factor(wine$qualityR)
-head(wine)
+wineqt$PredictedR <- as.factor(wineqt$PredictedR)
+wineqt$qualityR <- as.factor(wineqt$qualityR)
+head(wineqt)
 ```
 
 ## Creating a Confusion Matrix *** MODIFY TO FIT NEW ANALYSIS ***
 
 ```{r}
-cmatrix <- caret::confusionMatrix(wine$PredictedR, wine$qualityR)
+cmatrix <- caret::confusionMatrix(wineqt$PredictedR, wineqt$qualityR)
 cmatrix
 ```
 
@@ -174,7 +175,7 @@ corrplot(corr = winecor, method = "number", is.corr = FALSE)
 ## Assumption #4: Logit Linearity *** MODIFY TO FIT NEW ANALYSIS ***
 
 ```{r}
-wine1 <- wine %>% dplyr::select_if(is.numeric)
+wine1 <- wineqt %>% dplyr::select_if(is.numeric)
 predictors <- colnames(wine1)
 wine1 <- wine1 %>% mutate(logit=log(probabilities/(1-probabilities))) %>%
 gather(key= "predictors", value="predictor.value", -logit)
