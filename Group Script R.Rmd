@@ -66,7 +66,8 @@ str(wineqt)
 ## Convert Variables to Proper Data Type (If Necessary)
 
 ```{r}
-wineqt$qualityR <- as.factor(wineqt$qualityR)
+wine$qualityR <- as.numeric(wine$qualityR)
+head(wine)
 ```
 
 # Assumption Testing:
@@ -119,7 +120,7 @@ head(wineqt)
 ## Creating a Confusion Matrix *** MODIFY TO FIT NEW ANALYSIS ***
 
 ```{r}
-cmatrix <- caret::confusionMatrix(wineqt$PredictedR, wineqt$qualityR)
+cmatrix <- caret::confusionMatrix(wineqt$PredictedR, wineqt$qualityR2)
 cmatrix
 ```
 
