@@ -1,0 +1,286 @@
+
+---
+title: "Wine Quality Prediction Project"
+authors: "Autumn Heyman, Erin Weaver, Georgia Miller"
+output: html_document
+---
+
+# File Setup Tasks
+## Import Libraries
+
+```{r}
+library("tidyverse")
+library("caret")
+library("lmtest")
+library("magrittr")
+library("dplyr")
+library("tidyr")
+library("popbio")
+library("e1071")
+library("PerformanceAnalytics")
+library("corrplot")
+library("corpcor")
+library("MASS")
+```
+
+## Set Working Directory
+*** can be manually overridden by selecting source file location from the session menu **
+
+```{r}
+setwd("/Users/georg/Documents/GitHub/TheThreeMusketeers")
+```
+
+## Import Dataset
+
+```{r}
+wineqt <- read.csv("Data/WineQT.csv")
+head(wineqt)
+```
+
+# Data Wrangling 
+
+## Drop Id Column 
+
+```{r}
+wine_subset <- wineqt[, c(1,2,3,4,5,6,7,8,9,10,11,12)]
+```
+
+## Subset the data to only observations with a Quality of 5 or More.
+*** alternate path: recode entire data set into two groups
+
+```{r}
+
+wine_wrangled <- wine_subset %>% filter(quality >=5)
+head(wine_wrangled)
+
+```
+
+## Recode to combine observations with Quality 7 & 8 
+```{r}
+
+wine_wrangled$qualityR <- NA
+wine_wrangled$qualityR [wine_wrangled$quality==5] <- 0
+wine_wrangled$qualityR [wine_wrangled$quality==6] <- 1
+wine_wrangled$qualityR [wine_wrangled$quality==7] <- 2
+wine_wrangled$qualityR [wine_wrangled$quality==8] <- 2
+head(wine_wrangled)
+
+```
+## Drop Quality
+
+```{r}
+wine_wrangled <- wine_wrangled[, c(1,2,3,4,5,6,7,8,9,10,11,13)]
+head(wine_wrangled)
+```
+
+
+## Check All Data Types 
+
+```{r}
+str(wine_wrangled)
+```
+
+## Exploratory Analysis
+
+### Summarizing the dataset
+```{r}
+summary(wine_wrangled)
+```
+
+# Assumption Testing:
+
+## Assumption 1: The Dependent Variable is Ordered
+### Results of Test: Pass.
+
+## Assumption 2: One or more of the independent variables are either continuous, categorical, or ordinal
+### Results of Test: Pass.
+
+## Assumption 3: Absence of Multicollinearity
+
+### Correlation Matrix
+```{r}
+wine_wrangled$qualityR <- as.numeric(wine_wrangled$qualityR)
+corr_matrix <- cor(wine_wrangled)
+corr_matrix
+```
+
+### Results of Test:
+
+
+
+
+#### Correlation Plots
+
+```{r}
+corrplot(corr_matrix, type="upper", order="hclust", p.mat = corr_matrix, sig.level = 0.01, insig="blank")
+```
+
+``` {r}
+corrplot(corr_matrix, method = "number", is.corr = FALSE)
+```
+#### Pearson's Test
+
+```{r}
+chart.Correlation(wine_wrangled, histogram=FALSE, method="pearson")
+```
+
+#### *** OLD CODE TO REVIEW ***
+
+*** what does giv() do in this section of code?  winecor does not equal corr_matrix
+```{r}
+winecor <- ginv(cor(wine_wrangled))
+colnames(winecor) <- colnames(wine_wrangled)
+rownames(winecor) <- colnames(wine_wrangled)
+winecor 
+```
+```{r}
+corrplot(corr = winecor, method = "number", is.corr = FALSE)
+```
+
+**** REVIEW *** what is this test? Independence of errors? ***
+```{r}
+cor2pcor(cov(wine_wrangled))
+cor2pcor(cov(wine_wrangled))
+```
+
+
+
+## Assumption 4: Proportional Odds
+
+```{r}
+brant()
+```
+
+```{r}
+
+```
+
+
+
+### Results of Test:
+
+
+
+## Assumption #4: Logit Linearity *** MODIFY TO FIT NEW ANALYSIS ***
+
+```{r}
+wine1 <- wineqt %>% dplyr::select_if(is.numeric)
+predictors <- colnames(wine1)
+wine1 <- wine1 %>% mutate(logit=log(probabilities/(1-probabilities))) %>%
+gather(key= "predictors", value="predictor.value", -logit)
+```
+
+```{r}
+ggplot(wine1, aes(logit, predictor.value))+
+geom_point(size=.5, alpha=.5)+
+geom_smooth(method= "loess")+
+theme_bw()+
+facet_wrap(~predictors, scales="free_y")
+```
+
+## Assumption #5: Absence of Influential Outliers *** MODIFY TO FIT NEW ANALYSIS ***
+
+```{r}
+infl <- influence.measures(mylogit)
+summary(infl)
+```
+### Results indicate no evidence of **influential** outliers
+
+Box Plot Method
+
+### all box plots
+```{r}
+boxplot(wine1)
+ggplot(stack(wine1), aes(x = ind, y = values))+
+  geom_boxplot(fill='rosybrown', color="darkred") +
+  coord_flip()
+```
+
+All variables have outliers.
+
+
+*********************** MOVING FORWARD **************************
+
+# Correcting for Violation of Assumptions
+
+## Corrections for Violation of Multicollinearity
+
+```{r}
+```
+
+## Corrections for Violation of Logit Linearity
+```{r}
+```
+
+
+
+
+
+
+
+
+********* STOP SIGN ******** :)
+
+# Creating a Base Model  
+
+## Define the Order of the Dependent Variable
+```{r}
+
+wine_wrangled$qualityR = factor(wine_wrangled$qualityR, levels = c("0", "1", "2"), ordered = TRUE) 
+
+```
+
+## Dividing data into training and test set  *** REVIEW THIS SECTION**
+*** how to determine appropriate sample size
+*** what is seed and hot to determine appropriate seed value
+
+### Random sampling 
+```{r}
+
+samplesize = 0.60*nrow(wine_wrangled)
+set.seed(100)
+index = sample(seq_len(nrow(wine_wrangled)), size = samplesize)
+
+```
+
+### Creating training and test set 
+```{r}
+datatrain = wine_wrangled[index,]
+datatest = wine_wrangled[-index,]
+```
+
+## Create the Ordinal Logistic Regression Model
+```{r}
+
+model= polr(qualityR ~ fixed.acidity + volatile.acidity + citric.acid + residual.sugar + chlorides + free.sulfur.dioxide + total.sulfur.dioxide + density + pH + sulphates + alcohol, data = wine_wrangled, Hess = TRUE)
+
+summary(model)
+
+```
+
+## Significance Table of coefficients and intercepts
+
+```{R}
+summary_table <- coef(summary(model))
+pval <- pnorm(abs(summary_table[, "t value"]),lower.tail = FALSE)* 2
+summary_table <- cbind(summary_table, "p value" = round(pval,3))
+summary_table
+```
+
+## Explanation of Results:
+
+
+
+# Making predictions
+
+
+## Creating a Confusion Matrix *** MODIFY TO FIT NEW ANALYSIS ***
+
+```{r}
+cmatrix <- caret::confusionMatrix(wineqt$PredictedR, wineqt$qualityR2)
+cmatrix
+```
+
+
+
+ 
