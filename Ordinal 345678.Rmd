@@ -19,6 +19,7 @@ library("PerformanceAnalytics")
 library("corrplot")
 library("corpcor")
 library("MASS")
+library("brant")
 ```
 
 ## Set Working Directory
@@ -140,12 +141,10 @@ corrplot(corr = winecor, method = "number", is.corr = FALSE)
 ## Assumption 4: Proportional Odds
 
 ```{r}
-brant()
+brant(model)
 ```
 
-```{r}
-
-```
+### Results of Test: Pass
 
 
 

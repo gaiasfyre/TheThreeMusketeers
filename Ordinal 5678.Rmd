@@ -21,6 +21,7 @@ library("PerformanceAnalytics")
 library("corrplot")
 library("corpcor")
 library("MASS")
+library("brant")
 ```
 
 ## Set Working Directory
@@ -148,16 +149,10 @@ cor2pcor(cov(wine_wrangled))
 ## Assumption 4: Proportional Odds
 
 ```{r}
-brant()
+brant(model)
 ```
 
-```{r}
-
-```
-
-
-
-### Results of Test:
+### Results of Test: Pass
 
 
 
