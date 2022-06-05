@@ -1,32 +1,50 @@
 Scrum Master for next week: Georgia Miller
 
 List at least 5 things the team did well and will continue doing:
-1.	Communication:  This team has been exellcent this week
-2.	Collaboration:
-3.	Research:
-4.	Pushing Each Other:
-5.  Supporting Each Other: 
+1.	Communication:  This team has been exellcent this week with communicating information,
+        progress, questions, ideas, and constructive feedback.
+
+2.	Collaboration: Rebuilding our project has taken a great deal of collaboration- where we've been, ideas for improvement,
+        and addressing potential pitfalls we were beginning to see (evaluation questions/analyses that neededed to be re-thought)
+
+3.	Research: As we found that we desired to move in a different analysis direction with our revamped team, there was a fair    
+        amount of research to do this week, both in selecting our analysis and in learning how to run it and it's various tests. Ordinal logistic regression was not something we learned/enocuntered in our regular modules. The team did well at pulling, sharing, and interpreting resources as part of this process.
+
+4.	Pushing Each Other: As a team, we have pushed each other's understanding of concepts and outside of our comfort zones to 
+        learn a process. Some ideas we've abandoned because they didn't fit or weren't feasible, but we have continued to puch the best out of each other.
+
+5.  Supporting Each Other: There has also been a lot of support amongst the team in navigating the challenges of the week.     
+        We've made room to allow others to catch up during schedule mis-matches, moving forward where we can but not without feedback and committment of the team.  
 
 List at least 3 things the team did poorly and how you will mitigate them next sprint.
 
-1.	Splitting of tasks due to newness of the process:
+1.	Splitting of tasks due to newness of the process: Now that things have settled, and we've moved through likely the most      
+    intense week of the process, I'm seeing that tasks assigned to the Trello board may need to be revamped. Everyone wants to contribute their weight but we're all on very different work/life schedules. Tasks have been split up to allow everyone to contribute, but because we're learning the analysis process as we go, I'm noticing that tasks are being picked up and we're having to wait on other portions to fit first.
 
-2.	Stop and go flow:
+    Solution: Place tasks in Trello in order of completion (number them), if they are series tasks---that way they're not being picked up in pieces, but sequentially.  In the meantime, other tasks can then be picked up if we're waiting on another piece without a lot of back and forth.
 
-3.	Overwhelmed by the stress of the process:
+2.	Stop and go flow: This has been a somewhat of a continuance both between the old and newer version of the team.  We have a 
+    couple days in a row that seem to move and keep the flow going, then we get into a dead spot, then we're in hyperactive mode again. 
+
+    Solution: Again, better organization of Trello and continued communication.  With the "team project" some parts may cause some halts in the process---continue to move in places where we can.
+
+3.	Overwhelmed by the stress of the process:  The team has put some self-imposed stress on the project.  Each member desires to 
+    put out the best quality project we can, in part, because the team has that in our repsoective natures, but also because we're career changers we do not want a basic or flat project.  Adding with the re-do, learning new processes, and clashing personal schedules the beginning of the week has been stressful.
+
+    Solution: We've voiced that we're enjoying the journey of discovery. Erin reached out about a possible extension.  We're reminding ourselves to continue to work smart and timely, but remain committed more to the enjoyment of the process to make sure the final product and delivery of it are done in that energy and not one where the presentation will be sacrificed.
 
 
-List shout-outs to any team members for excelling in any way: 
+List shout-outs to any team members for excelling in any way: The team, individuals and as a whole, have been great at pulling together, redefining the team, and collaborating on the processes. Erin has alos done well in leading the team this week as scrum master.
 
-    Erin:
-
-    Georgia:
     
+    What did you learn as a team this week? 
 
-What did you learn as a team this week?
+    Technical aspects: We learned what an ordinal logistic regression is and how to run through the process in R.
 
-    Technical aspects:
+    Team aspect: Each member of the team has their own perspective, but when there is adequate communication without force or shutdown, we can move through just about anything.
 
 What did you learn as an individual this week?
 
-    Technical aspects: In prior weeks  
+    Technical aspects: As in the team position, there was a learning curve with the ordinal logistic regression; things that would work, and other aspects not worth pursuing.
+
+    Individual aspects: At the beginning of the week, I had to put several feelings aside to continue to move forward and through the project.  This week was a test of personal and team committment to the group process, but in the end, even though there were aspects I did not feel needed to take place, some aspects worked out for the best.  
