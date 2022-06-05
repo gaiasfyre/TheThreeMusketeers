@@ -127,7 +127,7 @@ chart.Correlation(wine_wrangled, histogram=FALSE, method="pearson")
 
 #### *** OLD CODE TO REVIEW ***
 
-*** what does giv() do in this section of code?  winecor does not equal corr_matrix
+*** what does ginv() do in this section of code?  winecor does not equal corr_matrix
 ```{r}
 winecor <- ginv(cor(wine_wrangled))
 colnames(winecor) <- colnames(wine_wrangled)
