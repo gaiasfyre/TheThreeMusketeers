@@ -259,14 +259,85 @@ summary_table
 # Making predictions
 
 
-## Creating a Confusion Matrix *** MODIFY TO FIT NEW ANALYSIS ***
+## Compute Confusion Matrix and Misclassification Error 
 
 ```{r}
-cmatrix <- caret::confusionMatrix(wineqt$PredictedR, wineqt$qualityR2)
-cmatrix
+predict.quality = predict(model,datatest)
+table(datatest$qualityR, predict.quality)
+mean(as.character(datatest$qualityR) != as.character(predict.quality))
 ```
 
+### Interpretation of the Confusion Matrix
+###In the test dataset, 0 times the below average "0" wine quality category is identified correctly. We observe that the model identifies below average wine poorly. This is because there is an inadequate representation of "below average" wine quality category in the traning dataset.
+###In the test dataset, 352 times the average "1" wine quality category is identified correctly.
+###In the test dataset, 23 times the above average "2" wine quality category is identified correctly.
+###Using the confusion matrix, we find that the misclassification error for our model is 18%.
 
 
+## Interpretation Using Plots: Plotting the Effects
 
+### Fixed Acidity
+```{r}
+Effect(focal.predictors = "fixed.acidity",model)
+plot(Effect(focal.predictors = "fixed.acidity",model))
+```
 
+### Volatile Acidity
+```{r}
+Effect(focal.predictors = "volatile.acidity",model)
+plot(Effect(focal.predictors = "volatile.acidity",model))
+```
+
+### Citric Acid
+```{r}
+Effect(focal.predictors = "citric.acid",model)
+plot(Effect(focal.predictors = "citric.acid",model))
+```
+
+### Residual Sugar
+```{r}
+Effect(focal.predictors = "residual.sugar",model)
+plot(Effect(focal.predictors = "residual.sugar",model))
+```
+
+### Chlorides
+```{r}
+Effect(focal.predictors = "chlorides",model)
+plot(Effect(focal.predictors = "chlorides",model))
+```
+
+### Free Sulfur Dioxide
+```{r}
+Effect(focal.predictors = "free.sulfur.dioxide",model)
+plot(Effect(focal.predictors = "free.sulfur.dioxide",model))
+```
+
+### Total Sulfur Dioxide
+```{r}
+Effect(focal.predictors = "total.sulfur.dioxide",model)
+plot(Effect(focal.predictors = "total.sulfur.dioxide",model))
+```
+
+### Density
+```{r}
+Effect(focal.predictors = "density",model)
+plot(Effect(focal.predictors = "density",model))
+```
+
+### pH
+```{r}
+Effect(focal.predictors = "pH",model)
+plot(Effect(focal.predictors = "fixed.acidity",model))
+```
+
+### Sulphates
+```{r}
+Effect(focal.predictors = "sulphates",model)
+plot(Effect(focal.predictors = "sulphates",model))
+```
+
+### Alcohol
+```{r}
+Effect(focal.predictors = "alcohol",model)
+plot(Effect(focal.predictors = "alcohol",model))
+```
