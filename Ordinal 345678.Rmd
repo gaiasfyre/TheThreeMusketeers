@@ -20,13 +20,15 @@ library("corrplot")
 library("corpcor")
 library("MASS")
 library("brant")
+library("car")
+library("effects")
 ```
 
 ## Set Working Directory
 *** can be manually overridden by selecting source file location from the session menu **
 
 ```{r}
-setwd("/Users/georg/Documents/GitHub/TheThreeMusketeers")
+setwd("/Users/erinweaver/Documents/GitHub/TheThreeMusketeers")
 ```
 
 ## Import Dataset
@@ -98,8 +100,6 @@ corr_matrix <- cor(wine_wrangled)
 corr_matrix
 ```
 
-### Results of Test:
-
 ### Correlation Plots
 
 ```{r}
@@ -115,96 +115,14 @@ corrplot(corr_matrix, method = "number", is.corr = FALSE)
 ```{r}
 chart.Correlation(wine_wrangled, histogram=FALSE, method="pearson")
 ```
+### Results of Test: Fail, assuming the cut off is 0.6 for correlation, Pass if the cut off is 0.7 for correlation.
 
-#### *** OLD CODE TO REVIEW ***
-
-**** REVIEW *** what is this test? Independence of errors? ***
-```{r}
-cor2pcor(cov(wine_wrangled))
-cor2pcor(cov(wine_wrangled))
-```
-
-*** what does giv() do in this section of code?  winecor does not equal corr_matrix
-```{r}
-winecor <- ginv(cor(wine_wrangled))
-colnames(winecor) <- colnames(wine_wrangled)
-rownames(winecor) <- colnames(wine_wrangled)
-winecor
-```
-
-```{r}
-corrplot(corr = winecor, method = "number", is.corr = FALSE)
-```
-
-
-
-## Assumption 4: Proportional Odds
-
-```{r}
-brant(model)
-```
-
-### Results of Test: Pass
-
-
-
-## Assumption #4: Logit Linearity *** MODIFY TO FIT NEW ANALYSIS ***
-
-### box tidwell goes here
-```{r}
-
-```
-
-### what's this called
-```{r}
-wine1 <- wineqt %>% dplyr::select_if(is.numeric)
-predictors <- colnames(wine1)
-wine1 <- wine1 %>% mutate(logit=log(probabilities/(1-probabilities))) %>%
-gather(key= "predictors", value="predictor.value", -logit)
-```
-
-```{r}
-ggplot(wine1, aes(logit, predictor.value))+
-geom_point(size=.5, alpha=.5)+
-geom_smooth(method= "loess")+
-theme_bw()+
-facet_wrap(~predictors, scales="free_y")
-```
-
-## Assumption #5: Absence of Influential Outliers *** MODIFY TO FIT NEW ANALYSIS ***
-
-```{r}
-infl <- influence.measures(mylogit)
-summary(infl)
-```
-### Results indicate no evidence of **influential** outliers
-
-Box Plot Method
-
-### all box plots
-```{r}
-boxplot(wine1)
-ggplot(stack(wine1), aes(x = ind, y = values))+
-  geom_boxplot(fill='rosybrown', color="darkred") +
-  coord_flip()
-```
-
-All variables have outliers.
-
-*********************** MOVING FORWARD **************************
-
-# Correcting for Violation of Assumptions
-
-## Corrections for Violation of Multicollinearity
-
-```{r}
-```
-
-## Corrections for Violation of Logit Linearity
-```{r}
-```
-
-
+The Variable Pairs with the highest correlation are as follows:
+* pH & fixed.acidity (-0.69)
+* density & fixed.acidity (0.68)
+* citric.acid & fixed.acidity (0.67)
+* total sulfur.dioxide & free.sulfur.dioxide (0.66)
+--> should we drop fixed.acidity & free.sulfur.dioxide?
 
 
 # Creating a Base Model  
@@ -213,6 +131,7 @@ All variables have outliers.
 ```{r}
 
 wine_wrangled$qualityR = factor(wine_wrangled$qualityR, levels = c("0", "1", "2"), ordered = TRUE) 
+str(wine_wrangled)
 
 ```
 
@@ -256,8 +175,16 @@ summary_table
 ## Explanation of Results:
 
 
-# Making predictions
+## Assumption 4: Proportional Odds  - run after model is generated
 
+```{r}
+brant(model)
+```
+
+### Results of Test: Pass
+
+
+# Making predictions
 
 ## Compute Confusion Matrix and Misclassification Error 
 
@@ -341,3 +268,71 @@ plot(Effect(focal.predictors = "sulphates",model))
 Effect(focal.predictors = "alcohol",model)
 plot(Effect(focal.predictors = "alcohol",model))
 ```
+
+
+
+
+
+
+
+
+
+
+
+
+**** SECTIONS OF THE CODE BELOW IS TEMPORARILY DISABLED BY HASH TAGS ****
+
+## Assumption #5: Logit Linearity *** MODIFY TO FIT NEW ANALYSIS ***
+
+### create probabilities
+```{r}
+#prob <- predict(model, type="probs")
+#head(prob)
+```
+
+### define predictors
+```{r}
+#wine1 <- wine_wrangled %>% dplyr::select_if(is.numeric)
+#predictors <- colnames(wine1)
+```
+
+### 
+```{r}
+#wine1 <- wine1 %>% mutate(logit=log(prob/(1-prob))) %>%
+#gather(key= "predictors", value="predictor.value", -logit)
+```
+
+## Assumption #5: Absence of Influential Outliers *** MODIFY TO FIT NEW ANALYSIS ***
+
+```{r}
+#infl <- influence.measures(model)
+#summary(infl)
+```
+### Results indicate no evidence of **influential** outliers
+
+Box Plot Method
+
+### all box plots
+```{r}
+boxplot(wine_wrangled)
+ggplot(stack(wine_wrangled), aes(x = ind, y = values))+
+  geom_boxplot(fill='rosybrown', color="darkred") +
+  coord_flip()
+```
+
+All variables have outliers.
+
+*********************** MOVING FORWARD **************************
+
+# Correcting for Violation of Assumptions
+
+## Corrections for Violation of Multicollinearity
+
+```{r}
+```
+
+## Corrections for Violation of Logit Linearity
+```{r}
+```
+
+
