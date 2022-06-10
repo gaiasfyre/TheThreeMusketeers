@@ -44,8 +44,6 @@ View Structure of Dataset
 str(wine_wrangled)
 ```
 
-*** STOP SIGN ***
-
 Identify Outliers
 
 ```{r}

@@ -7,80 +7,77 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-###Load Libaries
+Load Libaries
 ```{r}
 library(MASS)
 library(ggplot2)
 ```
-###Set Working Directory
+
+Set Working Directory
 ```{r}
 setwd("/Users/erinweaver/Documents/GitHub/TheThreeMusketeers/")
 ```
 
-###Import Data Set
+Import Data Set
 ```{r}
 wineqt <- read.csv("/Users/erinweaver/Documents/GitHub/TheThreeMusketeers/Data/WineQT.csv")
 head(wineqt)
 ```
 
-###Wrangle to Key Variables
+Wrangle to Key Variables
 ```{r}
 wine_wrangled <- wineqt[, c(2,5,8,9,12)]
 head(wine_wrangled)
 ```
 
-###View Structure of Dataset
+View Structure of Dataset
 ``` {r}
 str(wine_wrangled)
 ```
 
-###Set Quality to Factor
+Set Quality to Factor
 ``` {r}
 wine_wrangled$quality = factor(wine_wrangled$quality, levels = c("3", "4", "5", "6", "7", "8"), ordered = TRUE)
 ```
 
-###View Structure of Dataset
+View Structure of Dataset
 ``` {r}
 str(wine_wrangled)
 ```
 
-*** STOP SIGN ***
-
-
-
-###Scale each predictor variable:
+Scale each predictor variable:
 ```{r}
 wine_wrangled[1:4] <- scale(wine_wrangled[1:4])
 ```
 
-###Find the mean of each predictor variable:
+Find the mean of each predictor variable:
 ```{r}
 apply(wine_wrangled[1:4], 2, mean)
 ```
 
-###Find standard deviation of each predictor variable:
+Find standard deviation of each predictor variable:
 ```{r}
 apply(wine_wrangled[1:4], 2, sd) 
 ```
 
-###Make this example reproducible:
+Make this example reproducible:
 ```{r}
 set.seed(1)
 ```
 
-###Use 70% of dataset as training set and remaining 30% as testing set
+Use 70% of dataset as training set and remaining 30% as testing set
 ```{r}
 sample <- sample(c(TRUE, FALSE), nrow(wine_wrangled), replace=TRUE, prob=c(0.7,0.3))
 train <- wine_wrangled[sample, ]
 test <- wine_wrangled[!sample, ] 
 ```
 
-###Fit LDA model
+Fit LDA model
 ```{r}
 model <- lda(quality~., data=train)
 ```
 
-###View model output
+View model output
 ```{r}
 model
 ```
