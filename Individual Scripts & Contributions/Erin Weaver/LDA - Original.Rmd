@@ -44,6 +44,10 @@ wine_wrangled$quality = factor(wine_wrangled$quality, levels = c("3", "4", "5", 
 str(wine_wrangled)
 ```
 
+*** STOP SIGN ***
+
+
+
 ###Scale each predictor variable:
 ```{r}
 wine_wrangled[1:4] <- scale(wine_wrangled[1:4])
@@ -216,8 +220,70 @@ aggregate(x = wine_wrangled$volatile.acidity, by = list(wine_wrangled$quality), 
 
 ```{r}
 boxplot(wine_wrangled)
+```
+```{r}
 ggplot(stack(wine_wrangled), aes(x = ind, y = values))+
   geom_boxplot(fill='rosybrown', color="darkred") +
   coord_flip()
 ```
 
+
+
+REMOVE CHLORIDE OUTLIERS (77)
+
+```{r}
+chloride.Q1 <- quantile(wine_wrangled$chlorides, .25)
+chloride.Q3 <- quantile(wine_wrangled$chlorides, .75)
+chloride.IQR <- IQR(wine_wrangled$chlorides)
+```
+```{r}
+no.chlorides.outliers <- subset(wine_wrangled, wine_wrangled$chlorides > (chloride.Q1 - 1.5*chloride.IQR) & wine_wrangled$chlorides < (chloride.Q3 + 1.5*chloride.IQR))
+```
+
+```{r}
+boxplot(no.chlorides.outliers)
+```
+
+RECHECK OUTLIER COUNT:
+
+```{r}
+boxplot.stats(no.chlorides.outliers$pH)
+# outlier count - (23)
+```
+
+```{r}
+boxplot.stats(no.chlorides.outliers$volatile.acidity)
+# outlier count - (12)
+```
+
+```{r}
+boxplot.stats(no.chlorides.outliers$density)
+# outlier count - (29)
+```
+
+REMOVE DENSITY OUTLIERS (29)
+
+```{r}
+density_Q1 <- quantile(no.chlorides.outliers$density, .25)
+density_Q3 <- quantile(no.chlorides.outliers$density, .75)
+density_IQR <- IQR(no.chlorides.outliers$density)
+```
+```{r}
+no_outliers_cd <- subset(no.chlorides.outliers, no.chlorides.outliers$density > (density_Q1 - 1.5*density_IQR) & no.chlorides.outliers$density < (density_Q3 + 1.5*density_IQR))
+```
+
+```{r}
+boxplot(no_outliers_cd)
+```
+RECOUNT OUTLIERS
+```{r}
+boxplot.stats(no_outliers_cd$volatile.acidity)
+# outlier count - (12)
+```
+
+```{r}
+boxplot.stats(no_outliers_cd$pH)
+# outlier count - (17)
+```
+
+RUN MODEL AGAIN

@@ -1,0 +1,306 @@
+---
+title: "LDA - No Outliers"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+###Load Libaries
+```{r}
+library(MASS)
+library(ggplot2)
+```
+###Set Working Directory
+```{r}
+setwd("/Users/erinweaver/Documents/GitHub/TheThreeMusketeers/")
+```
+
+###Import Data Set
+```{r}
+wineqt <- read.csv("/Users/erinweaver/Documents/GitHub/TheThreeMusketeers/Data/WineQT.csv")
+head(wineqt)
+```
+
+Wrangle to Key Variables
+```{r}
+wine_wrangled <- wineqt[, c(2,5,8,9,12)]
+head(wine_wrangled)
+```
+
+View Structure of Dataset
+``` {r}
+str(wine_wrangled)
+```
+
+Set Quality to Ordered Factor
+``` {r}
+wine_wrangled$quality = factor(wine_wrangled$quality, levels = c("3", "4", "5", "6", "7", "8"), ordered = TRUE)
+```
+
+View Structure of Dataset
+``` {r}
+str(wine_wrangled)
+```
+
+*** STOP SIGN ***
+
+Identify Outliers
+
+```{r}
+boxplot.stats(wine_wrangled$density)
+# OUTLIER COUNT - 36
+```
+```{r}
+boxplot.stats(wine_wrangled$chlorides)
+# OUTLIER COUNT - 77
+```
+```{r}
+boxplot.stats(wine_wrangled$volatile.acidity)
+# OUTLIER COUNT - 14
+```
+
+```{r}
+boxplot.stats(wine_wrangled$pH)
+# OUTLIER COUNT - 20
+```
+
+REMOVE OUTLIERS (Chlorides)
+
+```{r}
+chloride.Q1 <- quantile(wine_wrangled$chlorides, .25)
+chloride.Q3 <- quantile(wine_wrangled$chlorides, .75)
+chloride.IQR <- IQR(wine_wrangled$chlorides)
+```
+```{r}
+no_outliers_c <- subset(wine_wrangled, wine_wrangled$chlorides > (chloride.Q1 - 1.5*chloride.IQR) & wine_wrangled$chlorides < (chloride.Q3 + 1.5*chloride.IQR))
+```
+
+```{r}
+boxplot(no_outliers_c)
+```
+
+RECHECK OUTLIER COUNT:
+
+```{r}
+boxplot.stats(no_outliers_c$pH)
+# outlier count - (23)
+```
+
+```{r}
+boxplot.stats(no_outliers_c$volatile.acidity)
+# outlier count - (12)
+```
+
+```{r}
+boxplot.stats(no_outliers_c$density)
+# outlier count - (29)
+```
+
+REMOVE OUTLIERS (Density)
+
+```{r}
+density_Q1 <- quantile(no_outliers_c$density, .25)
+density_Q3 <- quantile(no_outliers_c$density, .75)
+density_IQR <- IQR(no_outliers_c$density)
+```
+```{r}
+no_outliers_cd <- subset(no_outliers_c, no_outliers_c$density > (density_Q1 - 1.5*density_IQR) & no_outliers_c$density < (density_Q3 + 1.5*density_IQR))
+```
+
+```{r}
+boxplot(no_outliers_cd)
+```
+
+RECOUNT OUTLIERS
+```{r}
+boxplot.stats(no_outliers_cd$volatile.acidity)
+# outlier count - (12)
+```
+
+```{r}
+boxplot.stats(no_outliers_cd$pH)
+# outlier count - (17)
+```
+
+REMOVE OUTLIERS (pH)
+
+```{r}
+ph_Q1 <- quantile(no_outliers_cd$pH, .25)
+ph_Q3 <- quantile(no_outliers_cd$pH, .75)
+ph_IQR <- IQR(no_outliers_cd$pH)
+```
+```{r}
+no_outliers_cdp <- subset(no_outliers_cd, no_outliers_cd$pH > (ph_Q1 - 1.5*ph_IQR) & no_outliers_cd$pH < (ph_Q3 + 1.5*ph_IQR))
+```
+
+```{r}
+boxplot(no_outliers_cdp)
+```
+
+RECOUNT OUTLIERS
+```{r}
+boxplot.stats(no_outliers_cdp$volatile.acidity)
+# outlier count - (10)
+```
+
+REMOVE OUTLIERS (Volatile.Acidity)
+
+```{r}
+acid_Q1 <- quantile(no_outliers_cdp$volatile.acidity, .25)
+acid_Q3 <- quantile(no_outliers_cdp$volatile.acidity, .75)
+acid_IQR <- IQR(no_outliers_cdp$volatile.acidity)
+```
+```{r}
+no_outliers <- subset(no_outliers_cdp, no_outliers_cdp$volatile.acidity > (acid_Q1 - 1.5*acid_IQR) & no_outliers_cdp$volatile.acidity < (acid_Q3 + 1.5*acid_IQR))
+```
+
+```{r}
+boxplot(no_outliers)
+```
+
+
+
+
+*** BUILDING THE MODEL ***
+
+Scale each predictor variable:
+```{r}
+no_outliers[1:4] <- scale(no_outliers[1:4])
+```
+
+Find the mean of each predictor variable:
+```{r}
+apply(no_outliers[1:4], 2, mean)
+```
+
+Find standard deviation of each predictor variable:
+```{r}
+apply(no_outliers[1:4], 2, sd) 
+```
+
+Make this example reproducible:
+```{r}
+set.seed(1)
+```
+
+Use 70% of dataset as training set and remaining 30% as testing set
+```{r}
+sample <- sample(c(TRUE, FALSE), nrow(no_outliers), replace=TRUE, prob=c(0.7,0.3))
+train <- no_outliers[sample, ]
+test <- no_outliers[!sample, ] 
+```
+
+Fit LDA model
+```{r}
+model <- lda(quality~., data=train)
+```
+
+View model output
+```{r}
+model
+```
+
+Functions to Call Specifics:
+model$counts
+model$prior
+model$scaling
+model$svd
+
+
+GRAPHING MODEL MEANS
+
+Store Model Means
+```{r}
+modelmeans <- model$means
+```
+
+Convert Matrix to Data Frame
+```{r}
+modelmeans <- as.data.frame(modelmeans)
+str(modelmeans)
+```
+
+Convert row labels to column
+```{r}
+library(tibble)
+modelmeans <- tibble::rownames_to_column(modelmeans, "quality")
+```
+
+Melt Dataframe
+```{r}
+library(reshape2)
+mmodelmeans <- melt(modelmeans, id.vars="quality")
+```
+
+Everything on the same plot
+```{r}
+ggplot(mmodelmeans, aes(quality, value, group=variable, col=variable)) + 
+  geom_line() +
+  geom_point() + 
+  ggtitle("LDA Means : No Outliers") +
+  stat_smooth() 
+```
+
+Separate plots
+```{r}
+ggplot(mmodelmeans, aes(quality, value, group=variable, col=variable)) + 
+  geom_point() + 
+  stat_smooth() +
+  facet_wrap(~variable)
+```
+
+
+**** CHECKING THE MODEL QUALITY ****
+
+###Misclasification rate
+```{r}
+#lda.pred = (test$class)
+#lda.error = mean(default$default != lda.pred)
+#lda.error
+```
+
+###Confusion matrix
+```{r}
+#LDA_model = lda.cm
+#LDA_model
+```
+
+###Use LDA model to make predictions on test data
+```{r}
+predicted <- predict(model, test)
+```
+
+###View predicted class for first six observations in test set
+```{r}
+head(predicted$class)
+```
+
+###View posterior probabilities for first six observations in test set
+```{r}
+head(predicted$posterior)
+```
+
+###View linear discriminants for first six observations in test set
+```{r}
+head(predicted$x)
+```
+
+###Find accuracy of model
+```{r}
+#mean(predicted$class==test$quality)
+```
+
+###Define data to plot
+```{r}
+lda_plot <- cbind(train, predict(model)$x)
+```
+
+###Create plot
+```{r}
+ggplot(lda_plot, aes(LD1, LD2, LD3, LD4)) +
+  geom_point(aes(color = quality))
+```
+
+
