@@ -42,7 +42,7 @@ UC Davis. (2019a, March 1). Fixed acidity. Waterhouse Lab. Retrieved May 15, 202
 
 UC Davis. (2019b, March 1). Volatile acidity. Waterhouse Lab. Retrieved May 15, 2022, from https://waterhouse.ucdavis.edu/whats-in-wine/volatile-acidity
 
-UCI Machine Learning. (2017). Red wine quality. Kaggle. Retrieved May 15, 2022, from https://www.kaggle.com/datasets/uciml/red-wine-quality-cortez-et-al-2009
+UCI Machine Learning. (2017). [Data set]. Red wine quality. Kaggle. Retrieved May 15, 2022, from https://www.kaggle.com/datasets/uciml/red-wine-quality-cortez-et-al-2009
 
 UCLA. (n.d.-a). Ordinal logistic regression: R data analysis examples. UCLA Statistical Methods and Data Analytics. Retrieved June 2, 2022, from https://stats.oarc.ucla.edu/r/dae/ordinal-logistic-regression/
 
