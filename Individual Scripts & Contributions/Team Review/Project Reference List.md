@@ -52,7 +52,7 @@ University of St. Andrews. (2014). Ordinal logistic regression [PDF]. Retrieved 
 
 Vinifera, K. (2017, April 14). What’s the difference between sulfates and sulfites in wine? Wine Spectator. Retrieved May 15, 2022, from https://www.winespectator.com/articles/difference-between-sulfites-sulfates-wine-54706#:~:text=Sulfates%20aren't%20involved%20in,preservative%20by%20inhibiting%20microbial%20growth
 
-Volkers, S. (2020, November 10). What options do I have if the assumption of the linearity of the logit is not met in a binary logistic regression model. Research Gate. Retrieved May 29, 2022, from What options do I have if the assumption of the linearity of the logit is not met in a binary logistic regression model
+Volkers, S. (2020, November 10). What options do I have if the assumption of the linearity of the logit is not met in a binary logistic regression model. Research Gate. Retrieved May 29, 2022, from https://www.researchgate.net/post/What_options_do_I_have_if_the_assumption_of_the_linearity_of_the_logit_is_not_met_in_a_binary_logistic_regression_model
 
 Wu, S. (2020, July 16). What is residual sugar in wine? – ask decanter. Decanter. Retrieved May 15, 2022, from https://www.decanter.com/learn/residual-sugar-46007/
 
