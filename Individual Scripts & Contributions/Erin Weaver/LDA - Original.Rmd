@@ -111,6 +111,11 @@ library(reshape2)
 mmodelmeans <- melt(modelmeans, id.vars="quality")
 ```
 
+Export Means
+```{r}
+write.csv(mmodelmeans,"/Users/erinweaver/Documents/GitHub/TheThreeMusketeers/Data/modelmeans.csv", row.names = FALSE)
+```
+
 Everything on the same plot
 ```{r}
 ggplot(mmodelmeans, aes(quality, value, group=variable, col=variable)) + 
