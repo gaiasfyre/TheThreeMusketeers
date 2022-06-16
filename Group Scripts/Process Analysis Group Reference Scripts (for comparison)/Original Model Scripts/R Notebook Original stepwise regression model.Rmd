@@ -1,0 +1,232 @@
+---
+title: "Wine Quality Feature Selection & Prediction Project"
+author: "Autumn Heyman, Erin Weaver, Georgia Miller"
+output:
+  html_document:
+    df_print: paged
+---
+
+Here we are taking a look at the quality of Vinho Verde wines within a region and select the more relevant physiochemical features that contribute to wine quality and in which ways. This will be achieved through the use of stepwise binary logistic regression.
+
+# Importing Libraries
+First we begin by *importing* our libraries.
+
+```{r}
+library(tidyverse)
+library("caret")
+library("lmtest")
+library("magrittr")
+library("dplyr")
+library("tidyr")
+library("popbio")
+library("e1071")
+library("PerformanceAnalytics")
+library("corrplot")
+library(corpcor)
+library("MASS")
+```
+
+# Importing our Dataset
+Next we *import* our dataset.
+```{r}
+setwd('C:/Users/georg/Documents/GitHub/TheThreeMusketeers')
+wine <- read.csv("./Data/WineQT.csv")
+
+head(wine)
+```
+
+# Some Data Wrangling
+
+We beging by reformatting column names so there are no spaces.
+```{r}
+names(wine) <- str_replace_all(names(wine), c(" "="."))
+```
+
+Next, we proceed to drop the ID column since it will not be used in our analysis. We will also take a look again at the head of the dataframe to make sure the wrangling changes took effect.
+```{r}
+wine = subset(wine, select = -c(Id))
+head(wine)
+```
+
+# Assumptions Testing
+For this project, rather than taking each of the individual quality levels and doing a logistic regression against them, we will recode the levels so wines either have either 'good' or 'poor' quality. Wines with a quality between 3 and 5 will fall into the 'poor' quality level and those between 6 and 8 will fall into the 'good' quality level.
+
+## Recoding Wine Quality
+```{r}
+wine$qualityR <- NA
+wine$qualityR[wine$quality==3] <- 0
+wine$qualityR[wine$quality==4] <- 0
+wine$qualityR[wine$quality==5] <- 0
+wine$qualityR[wine$quality==6] <- 1
+wine$qualityR[wine$quality==7] <- 1
+wine$qualityR[wine$quality==8] <- 1
+head(wine)
+```
+## Running the Base Logistic Model
+```{r}
+mylogit <- glm(qualityR ~ fixed.acidity + volatile.acidity + citric.acid + 
+                  residual.sugar + chlorides + free.sulfur.dioxide + total.sulfur.dioxide+
+                  density + pH + sulphates + alcohol, data = wine, family="binomial")
+```
+
+## Predicting Wine Quality
+```{r}
+probabilities <- predict(mylogit, type = "response")
+```
+
+Here, I will take the average of the probabilities from the prediction and anything that is above that probability will be classified as a good quality wine and anything below it will be classified as a poor quality wine.
+```{r}
+avg <- mean(probabilities)
+wine$Predicted <- ifelse(probabilities > avg, "good", "poor")
+head(wine)
+```
+
+## Recoding the Predicted Variable
+
+```{r}
+wine$PredictedR <- NA
+```
+```{r}
+wine$PredictedR[wine$Predicted=="good"] <- 1
+wine$PredictedR[wine$Predicted=="poor"] <- 0
+head(wine)
+```
+
+## Converting Variables to Factors
+```{r}
+wine$PredictedR <- as.factor(wine$PredictedR)
+wine$qualityR <- as.factor(wine$qualityR)
+head(wine)
+```
+
+## Creating a Confusion Matrix
+```{r}
+conf_mat <- caret::confusionMatrix(wine$PredictedR, wine$qualityR)
+conf_mat
+```
+
+Thankfully, all of the four cells are above 5 so the sample size minimum is met.
+
+## Logit Linearity
+
+```{r}
+wine1 <- wine %>% dplyr::select_if(is.numeric)
+predictors <- colnames(wine1)
+wine1 <- wine1 %>% mutate(logit=log(probabilities/(1-probabilities))) %>%
+gather(key= "predictors", value="predictor.value", -logit)
+```
+```{r}
+ggplot(wine1, aes(logit, predictor.value))+
+geom_point(size=.5, alpha=.5)+
+geom_smooth(method= "loess")+
+theme_bw()+
+facet_wrap(~predictors, scales="free_y")
+```
+Most of the variables do not seem to have a linear logit relationship with wine quality so the assumption is not met. We will however proceed with our analyses.
+
+## Multicollinearity
+
+### Converting to Numeric
+To ensure the data was continuous, I will covert the new quality column to s numeric column.
+```{r}
+wine$qualityR2 <- as.numeric(wine$qualityR)
+head(wine)
+```
+
+### Subsetting Data
+I will create a data frame with the numeric quality column and the independent variables.
+```{r}
+wine_subset <- wine[, c(1,2,3,4,5,6,7,8,9,10,11,16)]
+```
+
+### Testing for Correlation
+```{r}
+chart.Correlation(wine_subset, histogram=FALSE, method="pearson")
+```
+
+```{r}
+corr_matrix <- cor(wine_subset)
+corr_matrix
+```
+
+```{r}
+corrplot(corr_matrix, type="upper", order="hclust", p.mat = corr_matrix, sig.level = 0.01, insig="blank")
+```
+
+## Testing for Multicollinearity
+```{r}
+cor2pcor(cov(wine_subset))
+cor2pcor(cov(wine_subset))
+```
+
+```{r}
+winecor <- ginv(cor(wine_subset))
+colnames(winecor) <- colnames(wine_subset)
+rownames(winecor) <- colnames(wine_subset)
+winecor
+```
+
+```{r}
+corrplot(corr = winecor, method = "number", is.corr = FALSE)
+```
+
+The VIFs for fixed acidity and density are greater than 5 and may be causing multicollinearity to be present in the data.
+
+
+## Test for Independence of Errors
+
+### graph
+```{r}
+plot(mylogit$residuals)
+```
+
+
+We are looking for pretty even distribution of points all the way across the x axis. We have that, so have met the assumption of independent errors.
+
+
+
+
+
+
+### Durbin-Watson Test
+
+Just for the sake of double checking for independence errors:
+```{r}
+dwtest(mylogit, alternative="two.sided")
+```
+Output:
+Durbin-Watson test
+
+data:  mylogit
+DW = 1.8156, p-value = 0.001465
+alternative hypothesis: true autocorrelation is not 0
+
+
+Since DW value is within 1-3 range, we have met the assumption of independent errors. 
+
+## Screening for Outliers
+```{r}
+infl <- influence.measures(mylogit)
+summary(infl)
+```
+
+
+None of the *db.1_* or *dffit* values are greater than 1, nor is *hat* greater than 0.3, so there is no evidence of outliers that need to be removed.
+
+## drop unneeded columns
+keeps <- c("qualityR2","alcohol","volatile.acidity", "sulphates", "citric.acid", "total.sulfur.dioxide", "density", "chlorides", "fixed.acidity", "free.sulfur.dioxide", "pH", "residual.sugar" )
+wine2 <- wine[keeps]
+
+
+# Logistic Regression
+
+## model of all variables
+{r}
+FitAll = lm(qualityR2 ~ ., data = wine2)
+summary(FitAll)
+
+## original model
+fitstart = lm(qualityR2 ~ 1, data = wine2)
+
+### hybrid model
+step(fitstart, direction="both", scope=formula(FitAll))
