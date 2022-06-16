@@ -1,5 +1,4 @@
-<img src="https://github.com/gaiasfyre/TheThreeMusketeers/blob/main/Images%20%26%20Visualizations/ThreeSwords.png" width="300" />
-
+<img src="https://github.com/gaiasfyre/TheThreeMusketeers/blob/main/Images%20%26%20Visualizations/PowerPoint%20Stock%20Images/ThreeSwords.png" width="300" />
 
 # The Three Musketeers
 
