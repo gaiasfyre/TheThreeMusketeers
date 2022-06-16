@@ -3,19 +3,21 @@
 # The Three Musketeers
 
 An Entity Academy Data Science Final Project Repository
-
+<br>
+</br>
 :wine_glass: **Project Title** :wine_glass:
 
 Wine Quality Analysis of Vinho Verde Red Wines
+<br>
 
-
+</br>
 :wine_glass: **Project Description** :wine_glass:
 
-We all love wine, especially after a long day of negotiating with our kids and navigating tense meetings with our bosses. But what really makes the difference between a "high value" wine and the cheap bottle we buy at Walmart? Quality evaluation is part of the wine certification process, assessed through physicochemical and sensory tests. Identifying the most influential factors in wine quality can improve wine making and help determine relative price points, differentiating the Monet type from the 5 year old finger painting type.
+We all love wine, especially after a long day of negotiating with our kids and navigating tense meetings with our bosses. But what really makes the difference between a "high value" wine and the cheap bottle we buy at Walmart? Physiochemical properties and sensory tests are important to the overall analysis of evaluation for wine certification. Identifying the most influential factors in wine quality can improve wine making and help determine relative price points, differentiating the Monet type from the 5 year old finger painting type.
 
 Due to the rarity of red wine produced in the Minho region, we look to focus our efforts exclusively on the Vinho Verde red portion of the data set of 1599 cases, which will further reduce to 1143 cases once the data is cleaned and wrangled. Through this process, we aim to build a successful model for evaluating which physicochemical properties have the most significant influence on the quality of wine. 
 
-Our evaluation questions and methodology are as follows.
+Our evaluation questions and links to analysis are as follows.
 
 Evaluation question 1. Which physiochemical properties of wine have the most significant impact on quality?
 
