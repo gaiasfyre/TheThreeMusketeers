@@ -36,17 +36,17 @@ The data can be used for basic understanding of the ratio for the variables in t
 
 Due to small sample size, the analysis of data may not be accurate in relation to actual quality of the wine. The data might be skewed due to previous cleaning of data from former user. Due to age of data, physiochemical properties might have changed. The classification is skewed due to inbalance, there are more normal wines than excellent or poor.
 
-        Table of Contents:
+Table of Contents:
 
-        [Project Proposal](https://github.com/gaiasfyre/TheThreeMusketeers/tree/main/Project%20Proposal)
+[Project Proposal](https://github.com/gaiasfyre/TheThreeMusketeers/tree/main/Project%20Proposal)
 
-        [PowerPoint Presentation](https://github.com/gaiasfyre/TheThreeMusketeers/tree/main/PowerPoint%20Presentation)
+[PowerPoint Presentation](https://github.com/gaiasfyre/TheThreeMusketeers/tree/main/PowerPoint%20Presentation)
 
-        [Data](https://github.com/gaiasfyre/TheThreeMusketeers/tree/main/Data)
+[Data](https://github.com/gaiasfyre/TheThreeMusketeers/tree/main/Data)
 
-        [Group Scripts](https://github.com/gaiasfyre/TheThreeMusketeers/tree/main/Group%20Scripts)
+[Group Scripts](https://github.com/gaiasfyre/TheThreeMusketeers/tree/main/Group%20Scripts)
 
-        [Images and Visualizations](https://github.com/gaiasfyre/TheThreeMusketeers/tree/main/Images%20%26%20Visualizations)
+[Images and Visualizations](https://github.com/gaiasfyre/TheThreeMusketeers/tree/main/Images%20%26%20Visualizations)
 
 
 
