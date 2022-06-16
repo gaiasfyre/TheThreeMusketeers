@@ -3,14 +3,12 @@
 # The Three Musketeers
 
 An Entity Academy Data Science Final Project Repository
-&nbsp;
-&nbsp;
+
 :wine_glass: **Project Title** :wine_glass:
 
 Wine Quality Analysis of Vinho Verde Red Wines
-&nbsp;
-&nbsp;
-&nbsp;
+
+
 :wine_glass: **Project Description** :wine_glass:
 
 We all love wine, especially after a long day of negotiating with our kids and navigating tense meetings with our bosses. But what really makes the difference between a "high value" wine and the cheap bottle we buy at Walmart? Quality evaluation is part of the wine certification process, assessed through physicochemical and sensory tests. Identifying the most influential factors in wine quality can improve wine making and help determine relative price points, differentiating the Monet type from the 5 year old finger painting type.
@@ -26,9 +24,9 @@ Evaluation question 1. Which physiochemical properties of wine have the most sig
 Evaluation question 2. Having identified the physicochemical properties that significantly influence wine quality, how do they affect wine quality individually? (i.e., What balance or interplay between these variables is necessary for the best quality wine?
 
 [Analysis 2](https://github.com/gaiasfyre/TheThreeMusketeers/tree/main/Group%20Scripts/Analysis%202:%20Linear%20Discriminant%20Analysis)
-&nbsp;
-&nbsp;
-&nbsp;
+
+
+
 :wine_glass: **How to Use the Project** :wine_glass:
 
 This project was an evaluation of the Vinho Verde Wines to understand what variables affected quality the most and what ratio of most effictive variables differentiate wine from being poor, average or good.
@@ -36,20 +34,20 @@ The data can be used for basic understanding of the ratio for the variables in t
 
 Due to small sample size, the analysis of data may not be accurate in relation to actual quality of the wine. The data might be skewed due to previous cleaning of data from former user. Due to age of data, physiochemical properties might have changed. The classification is skewed due to inbalance, there are more normal wines than excellent or poor.
 
-&nbsp;Table of Contents:
+Table of Contents:
 
-&nbsp;[Project Proposal](https://github.com/gaiasfyre/TheThreeMusketeers/tree/main/Project%20Proposal)
+[Project Proposal](https://github.com/gaiasfyre/TheThreeMusketeers/tree/main/Project%20Proposal)
 
-&nbsp;[PowerPoint Presentation](https://github.com/gaiasfyre/TheThreeMusketeers/tree/main/PowerPoint%20Presentation)
+[PowerPoint Presentation](https://github.com/gaiasfyre/TheThreeMusketeers/tree/main/PowerPoint%20Presentation)
 
-&nbsp;[Data](https://github.com/gaiasfyre/TheThreeMusketeers/tree/main/Data)
+[Data](https://github.com/gaiasfyre/TheThreeMusketeers/tree/main/Data)
 
-&nbsp;[Group Scripts](https://github.com/gaiasfyre/TheThreeMusketeers/tree/main/Group%20Scripts)
+[Group Scripts](https://github.com/gaiasfyre/TheThreeMusketeers/tree/main/Group%20Scripts)
 
-&nbsp;[Images and Visualizations](https://github.com/gaiasfyre/TheThreeMusketeers/tree/main/Images%20%26%20Visualizations)
-&nbsp;
-&nbsp;
-&nbsp;
+[Images and Visualizations](https://github.com/gaiasfyre/TheThreeMusketeers/tree/main/Images%20%26%20Visualizations)
+
+
+
 :wine_glass: **Credits** :wine_glass:
 
 Autumn Heyman https://github.com/autumnheyman
