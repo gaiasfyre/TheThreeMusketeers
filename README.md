@@ -5,11 +5,11 @@
 
 An Entity Academy Data Science Final Project Repository
 
-**Project Title**
+:wine_glass: **Project Title** :wine_glass:
 
 Wine Quality Analysis of Vinho Verde Red Wines
 
-**Project Description** ***Want to use objective section of Proposal for this section***
+:wine_glass: **Project Description** :wine_glass:
 
 This is an important component of your project that many new developers often overlook.
 
@@ -21,7 +21,7 @@ The quality of a README description often differentiates a good project from a b
     Why you used the technologies you used,
     Some of the challenges you faced and features you hope to implement in the future.
 
-**How to Use the Project**
+:wine_glass: **How to Use the Project** :wine_glass:
 
 Provide instructions and examples so users/contributors can use the project. This will make it easy for them in case they encounter a problem – they will always have a place to reference what is expected.
 
@@ -35,7 +35,7 @@ The data can be used for basic understanding of the ratio for the variables in t
 
 Due to small sample size, the analysis of data may not be accurate in relation to actual quality of the wine. The data might be skewed due to previous cleaning of data from former user. Due to age of data, physiochemical properties might have changed. The classification is skewed due to inbalance, there are more normal wines than excellent or poor.
 
-**Credits**
+:wine_glass: **Credits** :wine_glass:
 
 Autumn: For the credits section, I really like the credits to the 3 of us as they are written with the GitHub links---then maybe name our data science mentor and instructor for advisement and oversight (their GitHubs too if they don't mind.). For the resources, I would have a link to click to the project references page so the resources we used are available but also don't overshadow the 3 of us since the list is quite lengthy (I know we'll probably have to decide tomorrow how we're going to organize the folders so we can remove our personal folders before final presentation and start linking our READ ME).
 
@@ -102,3 +102,10 @@ Volkers, S. (2020, November 10). What options do I have if the assumption of the
 Wu, S. (2020, July 16). What is residual sugar in wine? – ask decanter. Decanter. Retrieved May 15, 2022, from https://www.decanter.com/learn/residual-sugar-46007/
 
 Zach. (2020, October 30). Linear discriminant analysis in r (step-by-step). Statology. Retrieved June 9, 2022, from https://www.statology.org/linear-discriminant-analysis-in-r/
+\f0\b Georgia:
+\f1\b0 \
+    Alcohol: https://public.tableau.com/app/profile/georgia6578/viz/AlcoholGraphs/AlcoholScatterplot#1\
+    Density: https://public.tableau.com/app/profile/georgia6578/viz/DensityGraphs/DensityScatterplot#1\
+\
+\
+}
