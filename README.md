@@ -3,14 +3,13 @@
 # The Three Musketeers
 
 An Entity Academy Data Science Final Project Repository
-<br>
-</br>
+&nbsp;  
+
 :wine_glass: **Project Title** :wine_glass:
 
 Wine Quality Analysis of Vinho Verde Red Wines
-<br>
+&nbsp;  
 
-</br>
 :wine_glass: **Project Description** :wine_glass:
 
 We all love wine, especially after a long day of negotiating with our kids and navigating tense meetings with our bosses. But what really makes the difference between a "high value" wine and the cheap bottle we buy at Walmart? Physiochemical properties and sensory tests are important to the overall analysis of evaluation for wine certification. Identifying the most influential factors in wine quality can improve wine making and help determine relative price points, differentiating the Monet type from the 5 year old finger painting type.
